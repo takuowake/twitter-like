@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -13,6 +16,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   TextEditingController selfIntroductionController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
+  File? image;
+  ImagePicker picker = ImagePicker();
+
+  Future<void> getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if(pickedFile != null) {
+      setState(() {
+        image = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +45,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           child: Column(
             children: [
               SizedBox(height: 30,),
-              CircleAvatar(
-                radius: 40,
-                child: Icon(Icons.add),
+              GestureDetector(
+                onTap: () {
+                  getImageFromGallery();
+                },
+                child: CircleAvatar(
+                  foregroundImage: image == null ? null : FileImage(image!),
+                  radius: 40,
+                  child: Icon(Icons.add),
+                ),
               ),
               Container(
                 width: 300,
@@ -83,7 +104,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   && selfIntroductionController.text.isNotEmpty
                   && emailController.text.isNotEmpty
                   && passController.text.isNotEmpty
-                  ) {
+                  && image != null) {
                     Navigator.pop(context);
                   }
                 },
