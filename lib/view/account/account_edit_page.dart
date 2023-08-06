@@ -6,6 +6,7 @@ import 'package:twitter_like/utils/authentication.dart';
 import 'package:twitter_like/utils/firestore/users.dart';
 import 'package:twitter_like/utils/function_utils.dart';
 import 'package:twitter_like/utils/widget_utils.dart';
+import 'package:twitter_like/view/start_up/login_page.dart';
 
 class AccountEditPage extends StatefulWidget {
   const AccountEditPage({super.key});
@@ -114,7 +115,20 @@ class _AccountEditPageState extends State<AccountEditPage> {
                   }
                 },
                 child: Text('更新'),
-              )
+              ),
+              SizedBox(height: 50),
+              ElevatedButton(
+                onPressed: () {
+                  Authentication.signOut();
+                  while(Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                  Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (context) => LoginPage()
+                  ));
+                },
+                child: Text('ログアウト'),
+              ),
             ],
           ),
         ),
