@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:twitter_like/model/account.dart';
 import 'package:twitter_like/model/post.dart';
 import 'package:twitter_like/utils/authentication.dart';
+import 'package:twitter_like/view/account/account_edit_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -65,7 +66,7 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           OutlinedButton(
                             onPressed: () {
-
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AccountEditPage()));
                             },
                             child: Text('編集'),
                           )
