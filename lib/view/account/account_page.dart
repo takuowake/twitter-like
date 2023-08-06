@@ -21,13 +21,13 @@ class _AccountPageState extends State<AccountPage> {
       id: '1',
       content: 'hello',
       postAccountId: '1',
-      createdTime: DateTime.now(),
+      createdTime: Timestamp.now(),
     ),
     Post(
       id: '2',
       content: 'hello2',
       postAccountId: '1',
-      createdTime: DateTime.now(),
+      createdTime: Timestamp.now(),
     )
   ];
   @override
@@ -120,7 +120,7 @@ class _AccountPageState extends State<AccountPage> {
                                       children: [
                                         Text(myAccount.name, style: TextStyle(fontWeight: FontWeight.bold)),
                                         Text('@{myAccount.userId}', style: TextStyle(color: Colors.grey)),
-                                        Text(DateFormat('M/d/yy').format(postList[index].createdTime!)),
+                                        Text(DateFormat('M/d/yy').format(postList[index].createdTime!.toDate())),
                                       ],
                                     ),
                                     Text(postList[index].content)
