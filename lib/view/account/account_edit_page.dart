@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:twitter_like/model/account.dart';
 import 'package:twitter_like/utils/authentication.dart';
+import 'package:twitter_like/utils/firestore/users.dart';
 import 'package:twitter_like/utils/function_utils.dart';
 import 'package:twitter_like/utils/widget_utils.dart';
 
@@ -91,6 +92,25 @@ class _AccountEditPageState extends State<AccountEditPage> {
                   if (nameController.text.isNotEmpty
                       && userIdController.text.isNotEmpty
                       && selfIntroductionController.text.isNotEmpty) {
+                    String imagePath = '';
+                    if(image == null) {
+                      imagePath = myAccount.imagePath;
+                    } else {
+                      var result = await FunctionUtils.uploadImage(myAccount.id, image!);
+                      imagePath = result;
+                    }
+                    Account updateAccount = Account(
+                      id: myAccount.id,
+                      name: nameController.text,
+                      userId: userIdController.text,
+                      selfIntroduction: selfIntroductionController.text,
+                      imagePath: imagePath,
+                    );
+                    Authentication.myAccount = updateAccount;
+                    var result = await UserFirestore.updateUser(updateAccount);
+                    if(result == true) {
+                      Navigator.pop(context, true);
+                    }
                   }
                 },
                 child: Text('更新'),
