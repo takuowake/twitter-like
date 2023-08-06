@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_like/model/account.dart';
 import 'package:twitter_like/model/post.dart';
+import 'package:twitter_like/utils/authentication.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -11,15 +13,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  Account myAccount = Account(
-    id: '1',
-    name: '拓生',
-    selfIntroduction: 'hello',
-    userId: 'waketakuo',
-    imagePath: 'https://d1tlzifd8jdoy4.cloudfront.net/wp-content/uploads/2018/08/flutter-logo-400x400.png',
-    createdTime: DateTime.now(),
-    updatedTime: DateTime.now(),
-  );
+  Account myAccount = Authentication.myAccount!;
 
   List<Post> postList = [
     Post(
