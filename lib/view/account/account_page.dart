@@ -59,14 +59,19 @@ class _AccountPageState extends State<AccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(myAccount.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                  Text('@{myAccount.userId}', style: TextStyle(color: Colors.grey)),
+                                  Text('@${myAccount.userId}', style: TextStyle(color: Colors.grey)),
                                 ],
                               )
                             ],
                           ),
                           OutlinedButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AccountEditPage()));
+                            onPressed: () async {
+                              var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AccountEditPage()));
+                              if(result == true) {
+                                setState(() {
+                                  myAccount = Authentication.myAccount!;
+                                });
+                              }
                             },
                             child: Text('編集'),
                           )
