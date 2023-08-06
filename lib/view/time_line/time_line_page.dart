@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_like/model/account.dart';
@@ -18,8 +19,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
     selfIntroduction: 'hello',
     userId: 'waketakuo',
     imagePath: 'https://d1tlzifd8jdoy4.cloudfront.net/wp-content/uploads/2018/08/flutter-logo-400x400.png',
-    createdTime: DateTime.now(),
-    updatedTime: DateTime.now(),
+    createdTime: Timestamp.now(),
+    updatedTime: Timestamp.now(),
   );
 
   List<Post> postList = [
