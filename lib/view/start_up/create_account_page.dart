@@ -9,6 +9,7 @@ import 'package:twitter_like/utils/authentication.dart';
 import 'package:twitter_like/utils/firestore/users.dart';
 import 'package:twitter_like/utils/function_utils.dart';
 import 'package:twitter_like/utils/widget_utils.dart';
+import 'package:twitter_like/view/start_up/check_email_page.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -113,7 +114,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       );
                       var _result = await UserFirestore.setUser(newAccount);
                       if (_result == true) {
-                        Navigator.pop(context);
+                        result.user!.sendEmailVerification();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CheckEmailPage(email: emailController.text, pass: passController.text)));
                       }
                     }
                   }
