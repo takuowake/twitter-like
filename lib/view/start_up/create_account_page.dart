@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:twitter_like/model/account.dart';
 import 'package:twitter_like/utils/authentication.dart';
 import 'package:twitter_like/utils/firestore/users.dart';
+import 'package:twitter_like/utils/function_utils.dart';
+import 'package:twitter_like/utils/widget_utils.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -23,36 +25,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   TextEditingController emailController = TextEditingController();
 
   File? image;
-  ImagePicker picker = ImagePicker();
-
-  Future<void> getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if(pickedFile != null) {
-      setState(() {
-        image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<String> uploadImage(String uid) async {
-    final FirebaseStorage storageInstance = FirebaseStorage.instance;
-    final Reference ref = storageInstance.ref();
-    await ref.child(uid).putFile(image!);
-    String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
-    print('image_path: $downloadUrl');
-    return downloadUrl;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text('新規登録', style: TextStyle(color: Colors.black),),
-        centerTitle: true,
-      ),
+      appBar: WidgetUtils.createAppBar('新規登録'),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -60,8 +37,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             children: [
               SizedBox(height: 30,),
               GestureDetector(
-                onTap: () {
-                  getImageFromGallery();
+                onTap: () async {
+                  var result = await FunctionUtils.getImageFromGallery();
+                  if(result != null) {
+                    setState(() {
+                      image = File(result.path);
+                    });
+                  }
                 },
                 child: CircleAvatar(
                   foregroundImage: image == null ? null : FileImage(image!),
@@ -121,7 +103,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   && image != null) {
                     var result = await Authentication.signUp(email: emailController.text, pass: passController.text);
                     if(result is UserCredential) {
-                      String imagePath = await uploadImage(result.user!.uid);
+                      String imagePath = await FunctionUtils.uploadImage(result.user!.uid, image!);
                       Account newAccount = Account(
                         id: result.user!.uid,
                         name: nameController.text,
